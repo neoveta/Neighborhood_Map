@@ -20,3 +20,11 @@ html, body{
   margin: 0;
   padding: 0;
 }
+
+h1 {
+  text-align: center;
+}
+
+#app-name{
+  background-color: rgb(128, 188, 238)
+}

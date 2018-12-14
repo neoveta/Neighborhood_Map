@@ -10,12 +10,12 @@ class App extends Component {
   }
 
   componentDidMount(){    //render map on page
-    this.loadMap()
+    //this.loadMap()
     this.getVenues()
   }
 
 
-  mapScript = (url) => {       //this function is outside the react component
+  mapScript = (url) => {    
     let index = window.document.getElementsByTagName("script")[0] //select script tag
     let script = window.document.createElement("script")    //created script tag
     script.src = url
@@ -25,7 +25,7 @@ class App extends Component {
   }
 
   loadMap = () => {
-    this.mapScript("https://maps.googleapis.com/maps/api/js?  key=AIzaSyAkOOpjPuHxiUG6e3DhJDIMDYZ5zL9Pr98&callback=initMap")    // Inserted API Key in the below call to load the API
+    this.mapScript("https://maps.googleapis.com/maps/api/js?  key=AIzaSyCG1UKw5yaq05cbuV27ZwuM2rNPWFO9Atg&callback=initMap")    // Inserted API Key in the below call to load the map
     window.initMap= this.initMap   // Asynchronously load the Google Maps script, passing in the callback reference
   }
 
@@ -41,8 +41,9 @@ class App extends Component {
     axios.get(endPoint + new URLSearchParams(params))
     .then(response => {
       this.setState({
-        venues: response    //stored all places in state venues 
-      })
+        venues: response.data.response.groups[0].items    //stored all places in state venues  
+      },
+      this.loadMap())  //render the map on the page only after all places were stored in state arrey 
     })
     .catch(error => {
       console.log("Error " + error)
@@ -52,14 +53,41 @@ class App extends Component {
 
   initMap = () => {   //function to initialize the map
     const map = new window.google.maps.Map(document.getElementById('map'), {
-      center: {lat: -34.397, lng: 150.644},
-      zoom: 8
-    });
+      center: {lat: 37.77493, lng: -122.419416},
+      zoom: 13
+    })
+
+    let infowindow = new window.google.maps.InfoWindow({
+      //content: contentString
+    })
+
+    this.state.venues.map(libVenue => {
+
+      let contentString = `${libVenue.venue.name}`    //add infowindow on the map
+
+      let marker = new window.google.maps.Marker({    //add marker on the map
+        position: {lat: libVenue.venue.location.lat, lng: libVenue.venue.location.lng},   //position is from the state venue arrey that stores all places in area
+        map: map,
+        title:libVenue.venue.name   //get the name of marker from venue state
+      })
+
+      marker.addListener('click', function() {    //add 'click' event listener on marker than infowindow opens
+
+        infowindow.setContent(contentString)
+
+        infowindow.open(map, marker);
+      })
+
+    })
+
   }
 
   render() {
     return (
       <div className="app">
+      <div id="app-name">
+        <h1> San Francisco Libraries. </h1>
+      </div>
         <div id="map">
       
         </div>
