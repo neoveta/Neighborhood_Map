@@ -110,12 +110,9 @@ class App extends Component {
     alert("There is a problem to load Google Maps. Please try reloading the page.")
   }
 
-
 handleClick = (venue) =>{   //Open infoWindow if click on the list of venues
   console.log('handleClick=', venue);
-  //this.state.infowindow.close();
   for(var i =0; i < this.state.mapMarkers.length; ++i){
-    //console.log('id=', this.state.mapMarkers[i].id, ' venue.id=', venue.id);
     if (this.state.mapMarkers[i].id === venue.id){
       console.log('found');
       this.state.infowindow.setContent(this.state.mapMarkers[i].content);
@@ -124,10 +121,6 @@ handleClick = (venue) =>{   //Open infoWindow if click on the list of venues
     }
   }
   console.log('not found id=', venue.id);
-  // this.state.mapMarkers.forEach(mapMarker =>{
-  //   if(mapMarker.id === venue.venue.id){
-  //     this.state.infowindow.open(some_map, mapMarker);
-  //   }});
   }
 
 searchVenue(query){
@@ -136,9 +129,8 @@ searchVenue(query){
    this.setState({
      venues: arr    //stored all places in state venues  
    });
-   //close any prev. opened title wnd
-   this.state.infowindow.close();
-   //console.log('markers=', this.state.mapMarkers);
+   
+   this.state.infowindow.close();     //close any previous opened infowindows
    this.state.mapMarkers.forEach(mapMarker => {
          mapMarker.name.toLowerCase().includes(query.toLowerCase()) === true 
          ? mapMarker.setVisible(true) 
