@@ -31,9 +31,7 @@ html{
   padding: 0;
 }
 
-h1 {
-  text-align: center;
-}
+
 
 h4, p {
   font-size: 12px;
@@ -91,7 +89,7 @@ h4, p {
  h1 {
    text-align: left;
  }
- 
+
 #sidebar{
     position: relative;
     width: 50%;
