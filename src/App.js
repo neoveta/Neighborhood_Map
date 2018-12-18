@@ -152,8 +152,8 @@ searchVenue(query){
     }
     return (
       <div className="app">
-        <div id="app-name">
-          <h1> San Francisco Libraries. </h1>
+        <div id="app-name" tabindex ="0">
+          <h1>San Francisco Libraries</h1>
         </div>
 
         <Sidebar 

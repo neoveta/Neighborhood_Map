@@ -1,9 +1,21 @@
 .App {
-  text-align: center;
+  position: fixed;
+  height: 100%;
 }
 
 body {
   margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+li {
+  display: list-item;
+  text-align: -webkit-match-parent;
+}
+
+.box{
+  padding-right: 10px;
 }
 
 #map {
@@ -51,10 +63,60 @@ h4, p {
 }
 
 #inputFilter{
-  width: 100%
+  width: 100%;
+  font-size: 8px;
+
 }
 
 #filter{
   font-size: 12px;
+  padding-left: 10px;
 }
 
+.nav {
+  display: block;
+  list-style-type: disc;
+  padding-inline-start: 20px;
+}
+
+@media only screen and (max-width:360px){
+
+#app-name{
+  width: 125%;
+  padding-right: 1%;
+  font-size: 12px;
+  text-align: left;
+}
+
+ h1 {
+   text-align: left;
+ }
+ 
+#sidebar{
+    position: relative;
+    width: 50%;
+    display:block;
+    position: absolute;
+  }
+  #map{
+    position:relative;
+    display:block;
+    margin:0;
+    left:0;
+    overflow: visible;
+  
+  }
+}
+@media only screen and (min-width:768px){
+ #map{
+   height:120vh;
+   position: relative;
+   margin-left:inherit;
+   width: 100%;
+  }
+}
+@media only screen and (min-width:1200px){
+  #map{
+    margin-left:11%;
+  }
+}

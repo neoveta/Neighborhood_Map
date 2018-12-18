@@ -13,7 +13,7 @@ class Sidebar extends Component {
             <span className="input-group-text" id="filter" tabIndex='2' aria-labelledby='input'>Filter Venues</span>
           </div>
             <input 
-              id='inputFilter' type="text" className="form-control" placeholder="Venue Name" aria-label="Username" 
+              id='inputFilter' type="text" className="form-control" placeholder="Type Venue Name" aria-label="Username" 
               aria-describedby="filter"
               onChange={this.props.onChange}
               />
