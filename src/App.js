@@ -14,8 +14,6 @@ class App extends Component {
       appError: false, 
       mapMarkers:[],
     };
-
-    this.mapError = this.mapError.bind(this)
 }
 
   componentDidMount(){    //render map on page
@@ -32,12 +30,15 @@ class App extends Component {
     script.src = url
     script.async = true     // Asynchronously load the Google Maps script
     script.defer = true 
-    index.parentNode.insertBefore(script, index)
+    index.parentNode.insertBefore(script, index) 
+    script.onerror = function(err) {    // Google Map Errors
+      console.log('Error of loading google maps. Please try to reload the page.');
+    }; 
   }
 
   loadMap = () => {
-    this.mapScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBxgFcBZaOdr43RND5lbJOXdfV9y7rztuc&callback=initMap")    // Inserted API Key in the below call to load the map
-    window.initMap= this.initMap   // Asynchronously load the Google Maps script, passing in the callback reference
+    this.mapScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBxgFcBZaOdr43RND5lbJOXdfV9y7rztuc&callback=initMap")
+    window.initMap= this.initMap   // Asynchronously load the Google Maps script, passing in the callback reference   
   }
 
   getVenues = () =>{
@@ -57,10 +58,10 @@ class App extends Component {
         origVenues : vens,
         venues: vens    //stored all places in state venues  
       },
-      this.loadMap())  //render the map on the page only after all places were stored in state arrey 
+      this.loadMap())  //render the map on the page only after all places were stored in state arry 
     })
     .catch(error => {
-      console.log("Error " + error)
+      console.log("Sorry, there is an error getting the venues from Foursuare. Please try to reload the page. " + error)
     })
   }
 
@@ -88,7 +89,6 @@ class App extends Component {
       marker.addListener('click', function() {    //add 'click' event listener on marker than infowindow opens
 
         infowindow.setContent(content)
-
         infowindow.open(googleMap, marker)
       })
 
@@ -104,38 +104,38 @@ class App extends Component {
 
     this.setState({
       infowindow: infowindow
-    })  
+    })
   }
-  mapError = () => {   // Google Map Errors
-    alert("There is a problem to load Google Maps. Please try reloading the page.")
+
+  bounceTimeout = (obj, tmMs) =>{
+    obj.setAnimation(null, tmMs)
   }
 
 handleClick = (venue) =>{   //Open infoWindow if click on the list of venues
-  console.log('handleClick=', venue);
   for(var i =0; i < this.state.mapMarkers.length; ++i){
     if (this.state.mapMarkers[i].id === venue.id){
-      console.log('found');
       this.state.infowindow.setContent(this.state.mapMarkers[i].content);
       this.state.infowindow.open(this.state.mapMarkers[i].map, this.state.mapMarkers[i]);
+      this.state.mapMarkers[i].setAnimation(window.google.maps.Animation.BOUNCE);
+      setTimeout(this.bounceTimeout(this.state.mapMarkers[i], 3000));
       return;
     }
   }
-  console.log('not found id=', venue.id);
-  }
+}
 
 searchVenue(query){
   console.log('searchVenue=', query);
   const arr = this.state.origVenues.filter( vn => vn.venue.name.toLowerCase().indexOf(query.toLowerCase()) >=0);
-   this.setState({
-     venues: arr    //stored all places in state venues  
-   });
+  this.setState({
+    venues: arr    //stored all places in state venues  
+  });
    
-   this.state.infowindow.close();     //close any previous opened infowindows
-   this.state.mapMarkers.forEach(mapMarker => {
-         mapMarker.name.toLowerCase().includes(query.toLowerCase()) === true 
-         ? mapMarker.setVisible(true) 
-         : mapMarker.setVisible(false);
-      }); 
+  this.state.infowindow.close();     //close any previous opened infowindows
+  this.state.mapMarkers.forEach(mapMarker => {
+    mapMarker.name.toLowerCase().includes(query.toLowerCase()) === true 
+    ? mapMarker.setVisible(true) 
+    : mapMarker.setVisible(false);
+  }); 
 }
 
   render() {
@@ -143,8 +143,8 @@ searchVenue(query){
       return <h1> There seems to be a problem.</h1>
     }
     return (
-      <div className="app">
-        <div id="app-name" tabIndex ="0">
+      <div role="main" className="app">
+        <div id="app-name">
           <h1>San Francisco Libraries</h1>
         </div>
 
@@ -154,7 +154,7 @@ searchVenue(query){
         passClick={this.handleClick}
         onChange={(event) => {this.searchVenue(event.target.value)}}/>   
 
-        <div id="map">
+        <div id="map" aria-labelledby="application" aria-label="Map" tabIndex='4'>
           </div>
       </div>
     );
